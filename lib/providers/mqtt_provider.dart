@@ -10,7 +10,6 @@ enum MqttState { connected, disconnected, connecting }
 
 class MqttModel {
   MqttState connect;
-  String clientId = Uuid().v4();
   MqttServerClient? client; 
 
   MqttModel({
@@ -30,6 +29,8 @@ class MqttNotifier extends StateNotifier<MqttModel> {
   MqttNotifier(): super(MqttModel.unknown()) {
     connect();
   }
+
+  String clientId = Uuid().v4();
   
   Future<void> init() async {
   }
@@ -51,7 +52,7 @@ class MqttNotifier extends StateNotifier<MqttModel> {
     // state.client?.pongCallback = pong;
 
     final connMessage = MqttConnectMessage()
-      .withClientIdentifier(state.clientId)
+      .withClientIdentifier(clientId)
       // .authenticateAs('username', 'password')
       // .withWillTopic('willtopic')
       // .withWillMessage('Will message')

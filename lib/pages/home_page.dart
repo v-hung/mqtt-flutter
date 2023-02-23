@@ -1,144 +1,213 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mqtt/providers/mqtt_provider.dart';
-
-// class HomePage extends ConsumerStatefulWidget {
-//   const HomePage({super.key});
-
-//   @override
-//   ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
-// }
-
-// class _HomePageState extends ConsumerState<HomePage> {
-
-//   @override
-//   void initState() {
-//     super.initState();
-
-//     ref.read(mqttProvider.notifier).connect();
-//     // print(value); // Hello world
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // WidgetsBinding.instance.addPostFrameCallback((_) {
-//     //   // context.read(stateProvider).state = text;
-//     //   print('1');
-//     // });
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Container(
-//           child: Consumer(
-//             builder: (context, ref, child) {
-//               final mqtt = ref.watch(mqttProvider.notifier).state;
-//               if (mqtt.connect == MqttState.connected) {
-//                 return const Text("Connected");
-//               }
-//               else if (mqtt.connect == MqttState.connecting) {
-//                 return const Text("connecting");
-//               }
-//               else if (mqtt.connect == MqttState.disconnected) {
-//                 return const Text("disconnected");
-//               }
-//               return Container();
-//             },
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+import 'package:mqtt/utils/colors.dart';
+import 'package:mqtt/widgets/bottom_nav_bar.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:rive/rive.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   ref.read(mqttProvider.notifier).connect();
-    // });
-
-    // final list = ref.watch(mqttStreamProvider);
-
+    final size = MediaQuery.of(context).size;
+    final heightSafeArea = MediaQuery.of(context).size.height -
+      AppBar().preferredSize.height -
+      MediaQuery.of(context).padding.top -
+      MediaQuery.of(context).padding.bottom;
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            // mainAxisSize: MainAxisSize.max,
-            // mainAxisAlignment: MainAxisAlignment.center,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Thái Nguyên City", style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: primary
+            ),),
+            const SizedBox(height: 3,),
+            Text("Chủ Nhật, 23/2/2023", style: TextStyle(
+              fontSize: 12,
+              // fontWeight: FontWeight.w500,
+              color: primary.withOpacity(0.7)
+            ),)
+          ],
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () => context.go('/camera'), 
+            icon: const Icon(Icons.stream_rounded),
+            color: primary,
+          ),
+          IconButton(
+            onPressed: () {}, 
+            icon: const Icon(Icons.menu),
+            color: primary,
+          )
+        ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.lime[100]
+        ),
+        child: SafeArea(
+          child: Stack(
+            // fit: StackFit.expand,
             children: [
-              Consumer(
-                builder: (context, ref, child) {
-                  final mqttState = ref.watch(mqttConnectProvider);
-                  print('change state');
-                  if (mqttState == MqttState.connected) {
-                    return Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                      color: Colors.green,
-                      child: const Text('Connected', style: TextStyle(color: Colors.white),),
-                    );
-                  }
-                  else if (mqttState == MqttState.connecting) {
-                    return Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                      color: Colors.blue,
-                      child: const Text('connecting...', style: TextStyle(color: Colors.white)),
-                    );
-                  }
-                  else if (mqttState == MqttState.disconnected) {
-                    return Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                      color: Colors.red,
-                      child: const Text('Disconnected', style: TextStyle(color: Colors.white)),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent)
-                  ),
-                  // child: Consumer(
-                  //   builder: (context, ref, child) {
-                  //     return ListView.builder(
-                  //       itemCount: 4,
-                  //       itemBuilder: (context, position) {
-                  //         return const Text("1");
-                  //       },
-                  //     );
-                  //   },
-                  // )
-                  // child: ListView.builder(
-                  //   itemCount: data.length,
-                  //   itemBuilder: (context, index) {
-                  //     return ListTile(
-                  //       title: Text(data.toString()),
-                  //     );
-                  //   },
-                  // )
+              Container(
+                width: size.width,
+                height: heightSafeArea * 0.6 + 20,
+                // decoration: BoxDecoration(color: Colors.green),
+                child: RiveAnimation.asset(
+                  "assets/anim/winter-animation.riv",
+                  // artboard: "",
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(mqttProvider.notifier).sendMessageToTopic('test', 'hello world');
-                },
-                child: const Text('Send message'),
+              Positioned(
+                top: 15,
+                left: 15,
+                right: 15,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: const [
+                        Text("🌦", style: TextStyle(
+                          fontSize: 24
+                        ),),
+                        const SizedBox(height: 5,),
+                        Text("Mostly\nCloudy", style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500
+                        ),)
+                      ],
+                    ),
+                    const SizedBox(width: 20,),
+                    const Text("34°", style: TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.w700
+                    ),)
+                  ],
+                ),
               ),
-              const SizedBox(height: 15,)
+              DraggableScrollableSheet(
+                // expand: false,
+                initialChildSize: 0.4,
+                minChildSize: 0.4,
+                maxChildSize: 0.9,
+                builder: (context, scrollController) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: ListView(
+                      controller: scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      shrinkWrap: true,
+                      children: const [
+                        Text("Nhiệt độ bây giờ", style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w600
+                        ),),
+                        SizedBox(height: 20,),
+                        BottomBodyWidget()
+                      ],
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ),
       ),
+      // bottomNavigationBar: const BottomNavBarCustom(),
+    );
+  }
+}
+
+class BottomBodyWidget extends ConsumerWidget {
+  const BottomBodyWidget({super.key});
+
+  static const List<Map<String, dynamic>> temperatureList = [
+    {
+      "icon" : Icons.thermostat_auto_rounded,
+      "label": "Feel Like",
+      "value": "34°"
+    },
+    {
+      "icon" : Icons.wind_power_rounded,
+      "label": "Wind",
+      "value": "10 km/h"
+    },
+    {
+      "icon" : Icons.umbrella_rounded,
+      "label": "Precipitation",
+      "value": "50%"
+    },
+    {
+      "icon" : Icons.water_drop_rounded,
+      "label": "Humidify",
+      "value": "59%"
+    }
+  ];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MasonryGridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      mainAxisSpacing: 15,
+      crossAxisSpacing: 15,
+      itemCount: temperatureList.length,
+      itemBuilder: (context, index) {
+        return Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Icon(temperatureList[index]['icon'] as IconData, color: primary, size: 24,),
+            ),
+            const SizedBox(width: 10,),
+            Expanded(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(temperatureList[index]['label'], style: TextStyle(
+                  fontSize: 12,
+                  color: primary.withOpacity(0.7)
+                ),),
+                const SizedBox(height: 3,),
+                Text(temperatureList[index]['value'], style: const TextStyle(
+                  // fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: primary
+                ),)
+              ],
+            ))
+          ],
+        );
+      },
     );
   }
 }

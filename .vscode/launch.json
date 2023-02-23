@@ -10,7 +10,7 @@
       "type": "dart",
       "args": [
         "-d",
-        "window"
+        "android"
       ]
     },
     {

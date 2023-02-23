@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mqtt/pages/home2.dart';
 import 'package:mqtt/providers/router_provider.dart';
+import 'package:mqtt/utils/colors.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -21,6 +22,10 @@ class MyApp extends ConsumerWidget  {
       title: 'Mqtt demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: Theme.of(context).textTheme.apply(
+          bodyColor: primary,
+          displayColor: primary,
+        )
       ),
       scrollBehavior: MaterialScrollBehavior().copyWith(
         dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mqtt/pages/camera_page.dart';
 import 'package:mqtt/pages/home_page.dart';
 
 class RouterNotifier extends ChangeNotifier {
@@ -36,6 +37,11 @@ class RouterNotifier extends ChangeNotifier {
       path: '/',
       builder: (context, state) => const HomePage(),
     ),
+    GoRoute(
+      name: 'camera',
+      path: '/camera',
+      builder: (context, state) => const CameraPage(),
+    ),
   ];
 }
 
@@ -43,7 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/camera',
     debugLogDiagnostics: true,
     refreshListenable: router,
     // redirect: router._redirect_login,
