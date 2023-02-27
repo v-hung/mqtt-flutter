@@ -6,9 +6,14 @@ import 'package:mqtt/utils/colors.dart';
 import 'package:mqtt/widgets/bottom_nav_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:rive/rive.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
+
+  // static var now = new DateTime.now();
+  // static var formatter = DateFormat ('yyyy-MM-dd');
+  // static String formattedDate = formatter.format(now);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
