@@ -45,7 +45,7 @@ class CameraPageBody extends ConsumerWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      // decoration: const BoxDecoration(color: Colors.black45),
+      decoration: const BoxDecoration(color: Colors.black),
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -230,7 +230,8 @@ class _VideoStreamState extends ConsumerState<VideoStream> {
     super.initState();
 
     _videoPlayerController = VlcPlayerController.network(
-      'rtsp://103.75.186.218:1935/live/myStream',
+      // 'rtsp://103.75.186.218:1935/live/myStream',
+      'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4',
       hwAcc: HwAcc.full,
       autoPlay: true,
       options: VlcPlayerOptions(),
@@ -243,8 +244,8 @@ class _VideoStreamState extends ConsumerState<VideoStream> {
 
     _videoPlayerController.addOnInitListener(() {
       setState(() {
-          _videoPlayerController.setVolume(1);
-        });
+        _videoPlayerController.setVolume(1);
+      });
     });
   }
 
@@ -261,7 +262,7 @@ class _VideoStreamState extends ConsumerState<VideoStream> {
       child: VlcPlayer(
         controller: _videoPlayerController,
         aspectRatio: screenSize.width / screenSize.height,
-        placeholder: Center(child: CircularProgressIndicator()),
+        placeholder: const Center(child: CircularProgressIndicator()),
       )
     );
   }

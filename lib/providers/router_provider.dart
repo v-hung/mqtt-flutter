@@ -49,7 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = RouterNotifier(ref);
 
   return GoRouter(
-    initialLocation: '/camera',
+    initialLocation: '/',
     debugLogDiagnostics: true,
     refreshListenable: router,
     // redirect: router._redirect_login,
