@@ -57,51 +57,52 @@ class HomePage extends ConsumerWidget {
         ],
       ),
       body: Container(
+        padding: EdgeInsets.only(top: size.height - heightSafeArea),
         decoration: BoxDecoration(
           color: Colors.lime[100]
         ),
-        child: SafeArea(
-          child: Stack(
-            // fit: StackFit.expand,
-            children: [
-              Container(
-                width: size.width,
-                height: heightSafeArea * 0.6 + 20,
-                // decoration: BoxDecoration(color: Colors.green),
-                child: RiveAnimation.asset(
-                  "assets/anim/winter-animation.riv",
-                  // artboard: "",
-                ),
+        child: Stack(
+          // fit: StackFit.expand,
+          children: [
+            SizedBox(
+              width: size.width,
+              height: heightSafeArea * 0.6 + 20,
+              // decoration: BoxDecoration(color: Colors.green),
+              child: const RiveAnimation.asset(
+                "assets/anim/winter-animation.riv",
+                // artboard: "",
               ),
-              Positioned(
-                top: 15,
-                left: 15,
-                right: 15,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: const [
-                        Text("🌦", style: TextStyle(
-                          fontSize: 24
-                        ),),
-                        const SizedBox(height: 5,),
-                        Text("Mostly\nCloudy", style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500
-                        ),)
-                      ],
-                    ),
-                    const SizedBox(width: 20,),
-                    const Text("34°", style: TextStyle(
-                      fontSize: 60,
-                      fontWeight: FontWeight.w700
-                    ),)
-                  ],
-                ),
+            ),
+            Positioned(
+              top: 15,
+              left: 15,
+              right: 15,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: const [
+                      Text("🌦", style: TextStyle(
+                        fontSize: 24
+                      ),),
+                      SizedBox(height: 5,),
+                      Text("Mostly\nCloudy", style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500
+                      ),)
+                    ],
+                  ),
+                  const SizedBox(width: 20,),
+                  const Text("34°", style: TextStyle(
+                    fontSize: 60,
+                    fontWeight: FontWeight.w700
+                  ),)
+                ],
               ),
-              DraggableScrollableSheet(
+            ),
+            SizedBox.expand(
+              child: DraggableScrollableSheet(
                 // expand: false,
                 initialChildSize: 0.4,
                 minChildSize: 0.4,
@@ -123,23 +124,27 @@ class HomePage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    child: ListView(
+                    child: SingleChildScrollView(
                       controller: scrollController,
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                      shrinkWrap: true,
-                      children: const [
-                        Text("Nhiệt độ bây giờ", style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w600
-                        ),),
-                        SizedBox(height: 20,),
-                        BottomBodyWidget()
-                      ],
+                      // shrinkWrap: true,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text("Nhiệt độ bây giờ", style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600
+                          ),),
+                          const SizedBox(height: 20,),
+                          BottomBodyWidget(),
+                        ],
+                      ),
                     ),
                   );
                 },
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
       // bottomNavigationBar: const BottomNavBarCustom(),
@@ -175,44 +180,47 @@ class BottomBodyWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MasonryGridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 2,
-      mainAxisSpacing: 15,
-      crossAxisSpacing: 15,
-      itemCount: temperatureList.length,
-      itemBuilder: (context, index) {
-        return Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: Icon(temperatureList[index]['icon'] as IconData, color: primary, size: 24,),
-            ),
-            const SizedBox(width: 10,),
-            Expanded(child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    final screenSize = MediaQuery.of(context).size;
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        for(var i = 0; i < temperatureList.length; i++) ...[
+          SizedBox(
+            width: (screenSize.width - (15 * 2) - 10 * 2) / 2,
+            child: Row(
               children: [
-                Text(temperatureList[index]['label'], style: TextStyle(
-                  fontSize: 12,
-                  color: primary.withOpacity(0.7)
-                ),),
-                const SizedBox(height: 3,),
-                Text(temperatureList[index]['value'], style: const TextStyle(
-                  // fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: primary
-                ),)
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(temperatureList[i]['icon'] as IconData, color: primary, size: 24,),
+                ),
+                const SizedBox(width: 10,),
+                Expanded(child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(temperatureList[i]['label'], style: TextStyle(
+                      fontSize: 12,
+                      color: primary.withOpacity(0.7)
+                    ),),
+                    const SizedBox(height: 3,),
+                    Text(temperatureList[i]['value'], style: const TextStyle(
+                      // fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: primary
+                    ),)
+                  ],
+                ))
               ],
-            ))
-          ],
-        );
-      },
+            ),
+          )
+        ]
+     ],
     );
   }
 }
